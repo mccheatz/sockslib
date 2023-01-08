@@ -1,11 +1,11 @@
 /*
  * Copyright 2015-2025 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -85,6 +85,8 @@ public class UDPRelayServer implements Runnable {
 
   private NetworkMonitor networkMonitor;
 
+  private boolean firstPacket = true;
+
   /**
    * Constructs a {@link UDPRelayServer} instance.
    */
@@ -154,8 +156,8 @@ public class UDPRelayServer implements Runnable {
           server.send(packet);
         } else {
           packet =
-              datagramPacketHandler.encapsulate(packet, new InetSocketAddress(clientAddress,
-                  clientPort));
+                  datagramPacketHandler.encapsulate(packet, new InetSocketAddress(clientAddress,
+                          clientPort));
           server.send(packet);
         }
       }
@@ -175,8 +177,12 @@ public class UDPRelayServer implements Runnable {
    * @return If the datagram packet is sent from client, it will return <code>true</code>.
    */
   protected boolean isFromClient(DatagramPacket packet) {
-
-    if (packet.getPort() == clientPort && clientAddress.equals(packet.getAddress())) {
+    if (firstPacket) {
+      firstPacket = false;
+      clientAddress = packet.getAddress();
+      clientPort = packet.getPort();
+      return true;
+    } else if (packet.getPort() == clientPort && clientAddress.equals(packet.getAddress())) {
       return true;
     }
     // client is in local.
