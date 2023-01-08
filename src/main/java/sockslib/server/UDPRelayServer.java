@@ -51,41 +51,41 @@ public class UDPRelayServer implements Runnable {
   /**
    * SOCKS5 datagram packet handle.
    */
-  private Socks5DatagramPacketHandler datagramPacketHandler = new Socks5DatagramPacketHandler();
+  protected Socks5DatagramPacketHandler datagramPacketHandler = new Socks5DatagramPacketHandler();
 
   /**
    * UDP server.
    */
-  private DatagramSocket server;
+  protected DatagramSocket server;
 
   /**
    * Buffer size.
    */
-  private int bufferSize = 1024 * 1024 * 5;
+  protected int bufferSize = 1024 * 1024 * 5;
 
   /**
    * Running thread.
    */
-  private Thread thread;
+  protected Thread thread;
 
   /**
    * A status flag.
    */
-  private boolean running = false;
+  protected boolean running = false;
 
   /**
    * Client's IP address.
    */
-  private InetAddress clientAddress;
+  protected InetAddress clientAddress;
 
   /**
    * Client's port.
    */
-  private int clientPort;
+  protected int clientPort;
 
-  private NetworkMonitor networkMonitor;
+  protected NetworkMonitor networkMonitor;
 
-  private boolean firstPacket = true;
+  protected boolean firstPacket = true;
 
   /**
    * Constructs a {@link UDPRelayServer} instance.
@@ -155,9 +155,7 @@ public class UDPRelayServer implements Runnable {
           datagramPacketHandler.decapsulate(packet);
           server.send(packet);
         } else {
-          packet =
-                  datagramPacketHandler.encapsulate(packet, new InetSocketAddress(clientAddress,
-                          clientPort));
+          packet = datagramPacketHandler.encapsulate(packet, clientAddress, clientPort);
           server.send(packet);
         }
       }

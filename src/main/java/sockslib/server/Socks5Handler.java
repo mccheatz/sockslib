@@ -54,7 +54,7 @@ public class Socks5Handler implements SocksHandler {
   /**
    * Protocol version.
    */
-  private static final int VERSION = 0x5;
+  protected static final int VERSION = 0x5;
 
   /**
    * Session.
@@ -282,8 +282,7 @@ public class Socks5Handler implements SocksHandler {
   }
 
   @Override
-  public void doUDPAssociate(Session session, CommandMessage commandMessage) throws
-      SocksException, IOException {
+  public void doUDPAssociate(Session session, CommandMessage commandMessage) throws IOException {
     UDPRelayServer udpRelayServer =
         new UDPRelayServer(((InetSocketAddress) session.getClientAddress()).getAddress(),
             commandMessage.getPort());

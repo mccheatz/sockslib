@@ -97,8 +97,7 @@ public class Socks5DatagramSocket extends DatagramSocket {
 
   @Override
   public void send(DatagramPacket packet) throws SocksException, IOException {
-    super.send(datagramPacketHandler.encapsulate(packet, new InetSocketAddress
-        (relayServerInetAddress, relayServerPort)));
+    super.send(datagramPacketHandler.encapsulate(packet, relayServerInetAddress, relayServerPort));
   }
 
   @Override

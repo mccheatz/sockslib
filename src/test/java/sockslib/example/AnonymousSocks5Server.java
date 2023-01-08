@@ -16,6 +16,8 @@ package sockslib.example;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sockslib.common.methods.NoAuthenticationRequiredMethod;
+import sockslib.forward.Socks5HandlerForward;
 import sockslib.server.SessionManager;
 import sockslib.server.SocksProxyServer;
 import sockslib.server.SocksServerBuilder;
@@ -37,7 +39,10 @@ public class AnonymousSocks5Server {
 
   public static void main(String[] args) throws IOException {
     Timer.open();
-    SocksProxyServer proxyServer = SocksServerBuilder.buildAnonymousSocks5Server();
+    SocksProxyServer proxyServer = SocksServerBuilder.newBuilder(Socks5HandlerForward.class)
+            .setSocksMethods(new NoAuthenticationRequiredMethod())
+            .setBindPort(1337).build();
+    Socks5HandlerForward.forwardPort = 19136;
     SessionManager sessionManager = proxyServer.getSessionManager();
     sessionManager.addSessionListener("logging", new LoggingListener());
     try {

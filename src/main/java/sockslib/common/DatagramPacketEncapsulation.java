@@ -15,6 +15,7 @@
 package sockslib.common;
 
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.net.SocketAddress;
 
 /**
@@ -35,7 +36,7 @@ public interface DatagramPacketEncapsulation {
    * @return Datagram packet that has encapsulated.
    * @throws SocksException If any error about SOCKS protocol occurs.
    */
-  public DatagramPacket encapsulate(DatagramPacket packet, SocketAddress destination) throws
+  public DatagramPacket encapsulate(DatagramPacket packet, InetAddress destinationAddress, int destinationPort) throws
       SocksException;
 
 }
